@@ -35,6 +35,7 @@ public class Elevator {
             floor++;
             announceFloor();
         }
+        openDoors();
     }
 
     private void moveDown(int toFloor) {
@@ -48,9 +49,18 @@ public class Elevator {
             floor--;
             announceFloor();
         }
+        openDoors();
     }
 
     private void announceFloor() {
         System.out.println("Currently on floor " + floor);
+    }
+
+    private void openDoors() {
+        System.out.println("Doors opening.");
+    }
+
+    private void closeDoors() {
+        System.out.println("Doors closing.");
     }
 }
