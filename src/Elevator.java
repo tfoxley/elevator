@@ -9,17 +9,23 @@ public class Elevator {
     private int id;
     private int floor;
     private boolean doorsOpen;
+    private int numTrips;
+    private boolean needsMaint;
 
 
     public Elevator(int id) {
         this.id = id;
         this.floor = 1;
         this.doorsOpen = false;
+        this.numTrips = 0;
+        this.needsMaint = false;
         System.out.println("Elevator " + id + " is now online.");
     }
 
     public void move(int toFloor) {
-        closeDoors();
+        if (doorsOpen) {
+            closeDoors();
+        }
         if (toFloor < floor) {
             moveDown(toFloor);
         } else if (toFloor > floor) {
@@ -28,6 +34,11 @@ public class Elevator {
             System.out.println("Elevator " + id + " already here!");
         }
         openDoors();
+        numTrips++;
+        if (numTrips > 99) {
+            needsMaint = true;
+            closeDoors();
+        }
     }
 
     private void moveUp(int toFloor) {
@@ -62,10 +73,12 @@ public class Elevator {
 
     private void openDoors() {
         System.out.println("Elevator " + id + " doors opening.");
+        doorsOpen = true;
     }
 
     private void closeDoors() {
         System.out.println("Elevator " + id + " doors closing.");
+        doorsOpen = false;
     }
 
     public int getId() {
@@ -90,5 +103,21 @@ public class Elevator {
 
     public void setDoorsOpen(boolean doorsOpen) {
         this.doorsOpen = doorsOpen;
+    }
+
+    public int getNumTrips() {
+        return numTrips;
+    }
+
+    public void setNumTrips(int numTrips) {
+        this.numTrips = numTrips;
+    }
+
+    public boolean isNeedsMaint() {
+        return needsMaint;
+    }
+
+    public void setNeedsMaint(boolean needsMaint) {
+        this.needsMaint = needsMaint;
     }
 }

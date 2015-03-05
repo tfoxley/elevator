@@ -12,13 +12,11 @@ public class Simulator {
     int numElevators;
     int numFloors;
     List<Elevator> elevators;
-    int location;
 
     public Simulator(int numElevators, int numFloors) {
         this.numElevators = numElevators;
         this.numFloors = numFloors;
         this.elevators = new ArrayList<Elevator>();
-        this.location = 1;
         initializeElevators(numElevators);
         handleRequests();
     }
@@ -37,15 +35,19 @@ public class Simulator {
                 run = false;
             } else {
                 String[] parts = input.split(" ");
-                int at = Integer.parseInt(parts[0]);
-                int to = Integer.parseInt(parts[1]);
-
-                if (to < 1 || to > numFloors || at < 1 || at > numFloors) {
-                    System.out.println("Invalid floor. Please try again.");
+                if (parts.length < 2) {
+                    System.out.println("Please provide current floor and the floor you would like to go to separated by a space.");
                 } else {
-                    System.out.println("To " + to);
-                    Elevator elevator = findClosest();
-                    elevator.move(to);
+                    int at = Integer.parseInt(parts[0]);
+                    int to = Integer.parseInt(parts[1]);
+
+                    if (to < 1 || to > numFloors || at < 1 || at > numFloors) {
+                        System.out.println("Invalid floor. Please try again.");
+                    } else {
+                        Elevator elevator = findClosest(at);
+                        elevator.move(at);
+                        elevator.move(to);
+                    }
                 }
             }
         }
@@ -57,12 +59,12 @@ public class Simulator {
         }
     }
 
-    private Elevator findClosest() {
+    private Elevator findClosest(int at) {
         int distance = numFloors;
         Elevator bestElevator = null;
         for (Elevator elevator : elevators) {
-            int curDist = Math.abs(elevator.getFloor() - location);
-            if (curDist < distance) {
+            int curDist = Math.abs(elevator.getFloor() - at);
+            if (curDist < distance && !elevator.isNeedsMaint()) {
                 distance = curDist;
                 bestElevator = elevator;
             }
