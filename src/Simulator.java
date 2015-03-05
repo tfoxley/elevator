@@ -1,4 +1,6 @@
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: travis
@@ -9,10 +11,15 @@ public class Simulator {
 
     int numElevators;
     int numFloors;
+    List<Elevator> elevators;
+    int location;
 
     public Simulator(int numElevators, int numFloors) {
         this.numElevators = numElevators;
         this.numFloors = numFloors;
+        this.elevators = new ArrayList<Elevator>();
+        this.location = 1;
+        initializeElevators(numElevators);
         handleRequests();
     }
 
@@ -22,10 +29,44 @@ public class Simulator {
             System.err.println("No console.");
             System.exit(1);
         }
-        String input = console.readLine("Where are you and where would you like to go?\n");
-        String[] parts = input.split(" ");
-        int at = Integer.parseInt(parts[0]);
-        int to = Integer.parseInt(parts[1]);
-        System.out.println("From " + at + " to " + to);
+
+        boolean run = true;
+        while (run) {
+            String input = console.readLine("Where are you and where would you like to go? (example: 1 3)\n");
+            if (input.equalsIgnoreCase("exit")) {
+                run = false;
+            } else {
+                String[] parts = input.split(" ");
+                int at = Integer.parseInt(parts[0]);
+                int to = Integer.parseInt(parts[1]);
+
+                if (to < 1 || to > numFloors || at < 1 || at > numFloors) {
+                    System.out.println("Invalid floor. Please try again.");
+                } else {
+                    System.out.println("To " + to);
+                    Elevator elevator = findClosest();
+                    elevator.move(to);
+                }
+            }
+        }
+    }
+
+    private void initializeElevators(int numElevators) {
+        for (int i = 1; i <= numElevators; i++) {
+            elevators.add(new Elevator(i));
+        }
+    }
+
+    private Elevator findClosest() {
+        int distance = numFloors;
+        Elevator bestElevator = null;
+        for (Elevator elevator : elevators) {
+            int curDist = Math.abs(elevator.getFloor() - location);
+            if (curDist < distance) {
+                distance = curDist;
+                bestElevator = elevator;
+            }
+        }
+        return bestElevator;
     }
 }

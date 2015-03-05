@@ -6,26 +6,32 @@
 public class Elevator {
     private static final int ELEVATOR_DELAY = 1000;
 
-    int floor;
+    private int id;
+    private int floor;
+    private boolean doorsOpen;
 
 
-
-    public Elevator() {
-        floor = 1;
+    public Elevator(int id) {
+        this.id = id;
+        this.floor = 1;
+        this.doorsOpen = false;
+        System.out.println("Elevator " + id + " is now online.");
     }
 
-    private void move(int toFloor) {
+    public void move(int toFloor) {
+        closeDoors();
         if (toFloor < floor) {
             moveDown(toFloor);
         } else if (toFloor > floor) {
             moveUp(toFloor);
         } else {
-            System.out.println("Already here!");
+            System.out.println("Elevator " + id + " already here!");
         }
+        openDoors();
     }
 
     private void moveUp(int toFloor) {
-        System.out.println("Going up!");
+        System.out.println("Elevator " + id + " Going up!");
         while (floor < toFloor) {
             try {
                 Thread.sleep(ELEVATOR_DELAY);
@@ -35,11 +41,10 @@ public class Elevator {
             floor++;
             announceFloor();
         }
-        openDoors();
     }
 
     private void moveDown(int toFloor) {
-        System.out.println("Going down!");
+        System.out.println("Elevator " + id + " Going down!");
         while (floor > toFloor) {
             try {
                 Thread.sleep(ELEVATOR_DELAY);
@@ -49,18 +54,41 @@ public class Elevator {
             floor--;
             announceFloor();
         }
-        openDoors();
     }
 
     private void announceFloor() {
-        System.out.println("Currently on floor " + floor);
+        System.out.println("Elevator " + id + " currently on floor " + floor);
     }
 
     private void openDoors() {
-        System.out.println("Doors opening.");
+        System.out.println("Elevator " + id + " doors opening.");
     }
 
     private void closeDoors() {
-        System.out.println("Doors closing.");
+        System.out.println("Elevator " + id + " doors closing.");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public boolean isDoorsOpen() {
+        return doorsOpen;
+    }
+
+    public void setDoorsOpen(boolean doorsOpen) {
+        this.doorsOpen = doorsOpen;
     }
 }
