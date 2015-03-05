@@ -45,8 +45,12 @@ public class Simulator {
                         System.out.println("Invalid floor. Please try again.");
                     } else {
                         Elevator elevator = findClosest(at);
-                        elevator.move(at);
-                        elevator.move(to);
+                        if (elevator == null) {
+                            System.out.println("No elevators are in service. Please contact maintenance.");
+                        } else {
+                            elevator.move(at);
+                            elevator.move(to);
+                        }
                     }
                 }
             }
